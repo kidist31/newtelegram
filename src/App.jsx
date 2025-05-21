@@ -18,32 +18,32 @@ function App() {
   const [time, setTime] = useState(new Date())
 
   // Simulate changing metrics
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMetrics({
-        cpu: Math.floor(Math.random() * 100),
-        memory: Math.floor(Math.random() * 100),
-        disk: Math.floor(Math.random() * 100),
-        network: Math.floor(Math.random() * 100),
-        uptime: Math.floor(99.5 + Math.random() * 0.5),
-        servers: 5 + Math.floor(Math.random() * 3),
-        alerts: Math.floor(Math.random() * 5),
-      })
-      setTime(new Date())
-    }, 3000)
+ useEffect(() => {
+  const interval = setInterval(() => {
+    setMetrics({
+      cpu: Math.floor(Math.random() * 100),
+      memory: Math.floor(Math.random() * 100),
+      disk: Math.floor(Math.random() * 100),
+      network: Math.floor(Math.random() * 100),
+      uptime: Math.floor(99.5 + Math.random() * 0.5),
+      servers: 5 + Math.floor(Math.random() * 3),
+      alerts: Math.floor(Math.random() * 5),
+    });
+    setTime(new Date());
+  }, 3000);
 
-    // Check if Telegram WebApp is available
-    if (window.Telegram && window.Telegram.WebApp) {
-      const webApp = window.Telegram.WebApp
-      webApp.ready()
-      webApp.expand()
+  // Telegram WebApp initialization
+  if (window.Telegram?.WebApp) {
+    const webApp = window.Telegram.WebApp;
+    webApp.ready();       // Notify Telegram the app is ready
+    webApp.expand();      // Expand to full height
+    console.log("Telegram WebApp initialized");
+    console.log(webApp.initDataUnsafe?.user); // Optional: log Telegram user info
+  }
 
-      // You can use webApp.initData to get data passed from Telegram
-      console.log("Telegram WebApp initialized")
-    }
+  return () => clearInterval(interval);
+}, []);
 
-    return () => clearInterval(interval)
-  }, [])
 
   const getStatusColor = (value) => {
     if (value < 50) return "bg-green-500"
